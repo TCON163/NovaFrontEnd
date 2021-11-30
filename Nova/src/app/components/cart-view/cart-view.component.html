@@ -1,0 +1,14 @@
+<div>
+    <div *ngFor let product of cartProducts>
+        {{product.product.title}}
+        <br>
+        {{product.product.price}}
+        <br>
+        {{product.product.platform}}
+        <br>
+        {{product.quantity}}
+        <br>
+        <button (click)='removeFromCart({{product}})'>Remove from cart</button>
+    </div>
+</div>
+<!-- The above is a placeholder for displaying items in the cart -->
