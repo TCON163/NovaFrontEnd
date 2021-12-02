@@ -6,32 +6,27 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
-
-  baseUrl = 'http://localhost:8090/Nova';
-  // baseUrl = 'http://http://18.212.102.32:8082/product-service/Nova'
+export class RawgService {
 
   constructor(private client: HttpClient) { }
 
+  baseUrl = 'http://localhost:8090/Nova';
+  // baseUrl = 'http://http://18.212.102.32:8082/product-service/Nova';
+
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json;charset=utf-8'
+      
     }),
+    responseType: 'text' as 'json'
   };
 
-  //get all products
-  getProducts(): Observable<Product[]> {
-    return this.client.get<Product[]>(this.baseUrl + "/display").pipe(
+  //Get Product Details
+  getDetails(product:Product): Observable<string> {
+    return this.client.get<string>(this.baseUrl+`/${product.productId}`, this.httpOptions).pipe(
       catchError(this.errorHandler)
-    )
+    );
   }
 
-  //Search Specific Product based on Title
-  searchProduct(title: String): Observable<Product[]> {
-    return this.client.get<Product[]>(this.baseUrl + "/title/" + title).pipe(
-      catchError(this.errorHandler)
-    )
-  }
   //Method for handling errors/exceptions
   errorHandler(error: any) {
     let message = "";
@@ -41,7 +36,7 @@ export class ProductsService {
     } else {
         //Get server-side error
         message = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
+    } 
     console.log(message);
     return throwError(() => new Error(message));
   }
